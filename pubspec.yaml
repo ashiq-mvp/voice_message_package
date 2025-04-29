@@ -10,13 +10,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_cache_manager: ^3.3.1
-  just_audio: ^0.9.37
-  syncfusion_flutter_sliders: ^25.1.41 
+
+  just_audio: ^0.10.1
+  flutter_cache_manager: ^3.4.1
+  syncfusion_flutter_sliders: ^29.1.40
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
+
+  flutter_lints: ^5.0.0
 
 
