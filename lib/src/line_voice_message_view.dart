@@ -7,12 +7,12 @@ import 'package:voice_message_package/src/widgets/play_pause_button.dart';
 
 /// A widget that displays a voice message view with play/pause functionality.
 ///
-/// The [VoiceMessageView] widget is used to display a voice message with customizable appearance and behavior.
+/// The [LineVoiceMessageView] widget is used to display a voice message with customizable appearance and behavior.
 /// It provides a play/pause button, a progress slider, and a counter for the remaining time.
 /// The appearance of the widget can be customized using various properties such as background color, slider color, and text styles.
 ///
-class VoiceMessageView extends StatelessWidget {
-  const VoiceMessageView({
+class LineVoiceMessageView extends StatelessWidget {
+  const LineVoiceMessageView({
     super.key,
     this.innerPadding = 12,
     this.cornerRadius = 20,
@@ -120,7 +120,6 @@ class VoiceMessageView extends StatelessWidget {
                     const SizedBox(height: 8),
                     _noises(newTHeme),
                     const SizedBox(height: 4),
-                    Text(controller.remindingTime, style: counterTextStyle),
                   ],
                 ),
               ),
@@ -129,7 +128,7 @@ class VoiceMessageView extends StatelessWidget {
               const SizedBox(width: 12),
 
               /// speed button
-              _changeSpeedButton(color),
+              Text(controller.remindingTime, style: counterTextStyle),
 
               ///
               const SizedBox(width: 10),
