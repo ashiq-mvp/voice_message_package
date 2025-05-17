@@ -12,96 +12,66 @@ import 'package:voice_message_package/src/widgets/play_pause_button.dart';
 /// The appearance of the widget can be customized using various properties such as background color, slider color, and text styles.
 ///
 class VoiceMessageView extends StatelessWidget {
-  const VoiceMessageView(
-      {super.key,
-      required this.controller,
-      this.backgroundColor = Colors.white,
-      this.activeSliderColor = Colors.red,
-      this.notActiveSliderColor,
-      this.circlesColor = Colors.red,
-      this.innerPadding = 12,
-      this.cornerRadius = 20,
-      // this.playerWidth = 170,
-      this.size = 38,
-      this.refreshIcon = const Icon(
-        Icons.refresh,
-        color: Colors.white,
-      ),
-      this.pauseIcon = const Icon(
-        Icons.pause_rounded,
-        color: Colors.white,
-      ),
-      this.playIcon = const Icon(
-        Icons.play_arrow_rounded,
-        color: Colors.white,
-      ),
-      this.stopDownloadingIcon = const Icon(
-        Icons.close,
-        color: Colors.white,
-      ),
-      this.playPauseButtonDecoration,
-      this.circlesTextStyle = const TextStyle(
-        color: Colors.white,
-        fontSize: 10,
-        fontWeight: FontWeight.bold,
-      ),
-      this.counterTextStyle = const TextStyle(
-        fontSize: 11,
-        fontWeight: FontWeight.w500,
-      ),
-      this.playPauseButtonLoadingColor = Colors.white});
+  const VoiceMessageView({
+    super.key,
+    this.innerPadding = 12,
+    this.cornerRadius = 20,
+    required this.controller,
+    // this.playerWidth = 170,
+    this.notActiveSliderColor,
+    this.circlesColor = Colors.red,
+    this.showChangeSpeedButton = true,
+    this.backgroundColor = Colors.white,
+    this.activeSliderColor = Colors.red,
+    this.playPauseButtonLoadingColor = Colors.white,
+    this.size = 38,
+    this.refreshIcon = const Icon(
+      Icons.refresh,
+      color: Colors.white,
+    ),
+    this.pauseIcon = const Icon(
+      Icons.pause_rounded,
+      color: Colors.white,
+    ),
+    this.playIcon = const Icon(
+      Icons.play_arrow_rounded,
+      color: Colors.white,
+    ),
+    this.stopDownloadingIcon = const Icon(
+      Icons.close,
+      color: Colors.white,
+    ),
+    this.playPauseButtonDecoration,
+    this.circlesTextStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 10,
+      fontWeight: FontWeight.bold,
+    ),
+    this.counterTextStyle = const TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+    ),
+  });
 
-  /// The controller for the voice message view.
-  final VoiceController controller;
-
-  /// The background color of the voice message view.
-  final Color backgroundColor;
-
-  ///
-  final Color circlesColor;
-
-  /// The color of the active slider.
-  final Color activeSliderColor;
-
-  /// The color of the not active slider.
-  final Color? notActiveSliderColor;
-
-  /// The text style of the circles.
-  final TextStyle circlesTextStyle;
-
-  /// The text style of the counter.
-  final TextStyle counterTextStyle;
-
-  /// The padding between the inner content and the outer container.
-  final double innerPadding;
-
-  /// The corner radius of the outer container.
-  final double cornerRadius;
-
-  /// The size of the play/pause button.
   final double size;
-
-  /// The refresh icon of the play/pause button.
-  final Widget refreshIcon;
-
-  /// The pause icon of the play/pause button.
-  final Widget pauseIcon;
-
-  /// The play icon of the play/pause button.
   final Widget playIcon;
-
-  /// The stop downloading icon of the play/pause button.
+  final Widget pauseIcon;
+  final Color circlesColor;
+  final Widget refreshIcon;
+  final double cornerRadius;
+  final double innerPadding;
+  final Color backgroundColor;
+  final Color activeSliderColor;
+  final bool showChangeSpeedButton;
   final Widget stopDownloadingIcon;
-
-  /// The play Decoration of the play/pause button.
+  final TextStyle circlesTextStyle;
+  final TextStyle counterTextStyle;
+  final VoiceController controller;
+  final Color? notActiveSliderColor;
+  final Color playPauseButtonLoadingColor;
   final Decoration? playPauseButtonDecoration;
 
-  /// The loading Color of the play/pause button.
-  final Color playPauseButtonLoadingColor;
-
   @override
-
-  /// Build voice message view.
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final color = circlesColor;
@@ -161,7 +131,7 @@ class VoiceMessageView extends StatelessWidget {
               const SizedBox(width: 12),
 
               /// speed button
-              _changeSpeedButton(color),
+              if (showChangeSpeedButton) _changeSpeedButton(color),
 
               ///
               const SizedBox(width: 10),
