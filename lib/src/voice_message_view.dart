@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voice_message_package/src/helpers/play_status.dart';
 import 'package:voice_message_package/src/helpers/utils.dart';
+import 'package:voice_message_package/src/shapes/custom_track_shape.dart';
 import 'package:voice_message_package/src/voice_controller.dart';
 import 'package:voice_message_package/src/widgets/noises.dart';
 import 'package:voice_message_package/src/widgets/play_pause_button.dart';
@@ -215,32 +216,4 @@ class VoiceMessageView extends StatelessWidget {
           ),
         ),
       );
-}
-
-///
-/// A custom track shape for a slider that is rounded rectangular in shape.
-/// Extends the [RoundedRectSliderTrackShape] class.
-class CustomTrackShape extends RoundedRectSliderTrackShape {
-  @override
-
-  /// Returns the preferred rectangle for the voice message view.
-  ///
-  /// The preferred rectangle is calculated based on the current state and layout
-  /// of the voice message view. It represents the area where the view should be
-  /// displayed on the screen.
-  ///
-  /// Returns a [Rect] object representing the preferred rectangle.
-  Rect getPreferredRect({
-    required RenderBox parentBox,
-    Offset offset = Offset.zero,
-    required SliderThemeData sliderTheme,
-    bool isEnabled = false,
-    bool isDiscrete = false,
-  }) {
-    const double trackHeight = 10;
-    final double trackLeft = offset.dx,
-        trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
-    final double trackWidth = parentBox.size.width;
-    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
-  }
 }
