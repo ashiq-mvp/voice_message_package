@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 class LoadingWidget extends StatefulWidget {
   final double? progress;
   final Function onClose;
-  final Widget stopDownloadingIcon ; 
-  final Color loadingColor ;
+  final Widget stopDownloadingIcon;
+  final Color loadingColor;
 
-  const LoadingWidget({
-    Key? key,
-    required this.progress,
-    required this.onClose,
-    required this.stopDownloadingIcon,
-    required this.loadingColor
-  }) : super(key: key);
+  const LoadingWidget(
+      {super.key,
+      required this.progress,
+      required this.onClose,
+      required this.stopDownloadingIcon,
+      required this.loadingColor});
 
   @override
   LoadingWidgetState createState() => LoadingWidgetState();
 }
 
-class LoadingWidgetState extends State<LoadingWidget> with SingleTickerProviderStateMixin {
+class LoadingWidgetState extends State<LoadingWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -53,7 +53,7 @@ class LoadingWidgetState extends State<LoadingWidget> with SingleTickerProviderS
         ),
         Positioned(
           child: InkWell(
-            child: widget.stopDownloadingIcon ,
+            child: widget.stopDownloadingIcon,
             onTap: () => widget.onClose(),
           ),
         ),
