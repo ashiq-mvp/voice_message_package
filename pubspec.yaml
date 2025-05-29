@@ -13,12 +13,12 @@ dependencies:
 
   just_audio: ^0.10.3
   flutter_cache_manager: ^3.4.1
-  syncfusion_flutter_sliders: ^29.2.4
+  syncfusion_flutter_sliders: ^29.2.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 
