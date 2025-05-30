@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:voice_message_package/src/helpers/play_status.dart';
 import 'package:voice_message_package/src/helpers/utils.dart';
 import 'package:voice_message_package/src/shapes/custom_track_shape.dart';
 import 'package:voice_message_package/src/voice_controller.dart';
 import 'package:voice_message_package/src/widgets/noises.dart';
 import 'package:voice_message_package/src/widgets/play_pause_button.dart';
 
-/// A widget that displays a voice message view with play/pause functionality.
-///
-/// The [VoiceMessageView] widget is used to display a voice message with customizable appearance and behavior.
-/// It provides a play/pause button, a progress slider, and a counter for the remaining time.
-/// The appearance of the widget can be customized using various properties such as background color, slider color, and text styles.
-///
+/// A widget that displays a voice message with play/pause, slider, noise visualization, and speed control.
 class VoiceMessageView extends StatelessWidget {
   const VoiceMessageView({
     super.key,
     this.innerPadding = 12,
     this.cornerRadius = 20,
     required this.controller,
-    // this.playerWidth = 170,
     this.notActiveSliderColor,
     this.circlesColor = Colors.red,
     this.backgroundColor = Colors.white,
@@ -72,9 +65,9 @@ class VoiceMessageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     final color = circlesColor;
-    final newTHeme = theme.copyWith(
+    final sliderTheme = theme.copyWith(
       sliderTheme: SliderThemeData(
         trackShape: CustomTrackShape(),
         thumbShape: SliderComponentShape.noThumb,
@@ -91,13 +84,12 @@ class VoiceMessageView extends StatelessWidget {
         borderRadius: BorderRadius.circular(cornerRadius),
       ),
       child: ValueListenableBuilder(
-        /// update ui when change play status
         valueListenable: controller.updater,
-        builder: (context, value, child) {
+        builder: (context, _, __) {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              /// play pause button
+              // Play/Pause Button
               PlayPauseButton(
                 controller: controller,
                 color: color,
@@ -110,29 +102,26 @@ class VoiceMessageView extends StatelessWidget {
                 buttonDecoration: playPauseButtonDecoration,
               ),
 
-              ///
               const SizedBox(width: 10),
 
-              /// slider & noises
+              // Slider and Noise visualization
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-                    _noises(newTHeme),
+                    _noises(sliderTheme),
                     const SizedBox(height: 4),
                     Text(controller.remindingTime, style: counterTextStyle),
                   ],
                 ),
               ),
 
-              ///
               const SizedBox(width: 12),
 
-              /// speed button
+              // Speed button
               _changeSpeedButton(color),
 
-              ///
               const SizedBox(width: 10),
             ],
           );
@@ -141,25 +130,26 @@ class VoiceMessageView extends StatelessWidget {
     );
   }
 
-  SizedBox _noises(ThemeData newTHeme) => SizedBox(
+  /// Builds the noise bars and the slider overlay.
+  SizedBox _noises(ThemeData sliderTheme) => SizedBox(
         height: 30,
         width: controller.noiseWidth,
         child: Stack(
           alignment: Alignment.center,
           children: [
-            /// noises
+            // Noise visualization bars
             Noises(
               rList: controller.randoms!,
               activeSliderColor: activeSliderColor,
             ),
 
-            /// slider
+            // Animated sliding "inactive" overlay bar
             AnimatedBuilder(
               animation: CurvedAnimation(
                 parent: controller.animController,
                 curve: Curves.ease,
               ),
-              builder: (BuildContext context, Widget? child) {
+              builder: (context, child) {
                 return Positioned(
                   left: controller.animController.value,
                   child: Container(
@@ -171,22 +161,22 @@ class VoiceMessageView extends StatelessWidget {
                 );
               },
             ),
+
+            // Transparent Slider for user interaction on top of noise bars
             Opacity(
               opacity: 0,
               child: Container(
                 width: controller.noiseWidth,
                 color: Colors.transparent.withValues(alpha: 1),
                 child: Theme(
-                  data: newTHeme,
+                  data: sliderTheme,
                   child: Slider(
                     value: controller.currentMillSeconds,
                     max: controller.maxMillSeconds,
                     onChangeStart: controller.onChangeSliderStart,
                     onChanged: controller.onChanging,
                     onChangeEnd: (value) {
-                      controller.onSeek(
-                        Duration(milliseconds: value.toInt()),
-                      );
+                      controller.onSeek(Duration(milliseconds: value.toInt()));
                       controller.play();
                     },
                   ),
@@ -197,12 +187,11 @@ class VoiceMessageView extends StatelessWidget {
         ),
       );
 
+  /// Speed change button with current play speed text.
   Transform _changeSpeedButton(Color color) => Transform.translate(
         offset: const Offset(0, -7),
         child: GestureDetector(
-          onTap: () {
-            controller.changeSpeed();
-          },
+          onTap: () => controller.changeSpeed(),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
             decoration: BoxDecoration(
@@ -216,4 +205,42 @@ class VoiceMessageView extends StatelessWidget {
           ),
         ),
       );
+}
+
+/// Extension for percentage width based on screen width.
+/// Usage: 20.w() means 20% of screen width.
+extension SizeExtensions on double {
+  double w([BuildContext? context]) {
+    double screenWidth;
+
+    if (context != null) {
+      // Get width from MediaQuery in the context
+      screenWidth = MediaQuery.of(context).size.width;
+    } else {
+      // No context, get the primary FlutterView physical size from PlatformDispatcher
+      // and convert physical pixels to logical pixels by dividing by devicePixelRatio
+      final view = WidgetsBinding.instance.platformDispatcher.views.first;
+      screenWidth = view.physicalSize.width / view.devicePixelRatio;
+    }
+
+    return (this / 100) * screenWidth;
+  }
+}
+
+/// Extension to modify color alpha and optionally other properties.
+/// Example: color.withValues(alpha: 0.4) sets alpha to 0.4 while keeping other values.
+extension ColorExtensions on Color {
+  Color withValues({
+    double? alpha,
+    double? red,
+    double? green,
+    double? blue,
+  }) {
+    return Color.fromARGB(
+      ((alpha ?? a) * 255).round().clamp(0, 255),
+      (red ?? r).round().clamp(0, 255),
+      (green ?? g).round().clamp(0, 255),
+      (blue ?? b).round().clamp(0, 255),
+    );
+  }
 }
